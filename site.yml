@@ -8,7 +8,7 @@
         name: elasticsearch
         state: restarted
   tasks:
-    - name: "Download Elasticsearch's rpm"
+    - name: Download Elasticsearch's rpm
       get_url:
         url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elk_stack_version }}-x86_64.rpm"
         dest: "/tmp/elasticsearch-{{ elk_stack_version }}-x86_64.rpm"
@@ -26,13 +26,30 @@
         dest: /etc/elasticsearch/elasticsearch.yml
       notify: restart Elasticsearch
 - name: Install Kibana
-tasks:
-  - name: "Download Kibana rpm"
-    get_url:
-      url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elk_stack_version }}-x86_64.rpm"
-      dest: "/tmp/elasticsearch-{{ elk_stack_version }}-x86_64.rpm"
-    register: download_elastic
-    until: download_elastic is succeeded
   hosts: kibana
+  tasks:
+    - name: Download Kibana rpm
+      get_url:
+        url: "https://artifacts.elastic.co/downloads/kibana/kibana-{{ elk_stack_version }}-x86_64.rpm"
+        dest: "/tmp/kibana-{{ elk_stack_version }}-x86_64.rpm"
+      register: download_kibana
+      until: download_kibana is succeeded
+    - name: Install kibana
+        become: true
+        yum:
+          name: "/tmp/kibana-{{ elk_stack_version }}-x86_64.rpm"
+          state: present
 - name: Install Filebeat
     hosts: app
+    tasks:
+      - name: Download Filebeat rpm
+        get_url:
+          url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ elk_stack_version }}-x86_64.rpm"
+          dest: "/tmp/filebeat-{{ elk_stack_version }}-x86_64.rpm"
+        register: download_filebeat
+        until: download_filebeat is succeeded
+      - name: Install Filebeat
+          become: true
+          yum:
+            name: "/tmp/filebeat-{{ elk_stack_version }}-x86_64.rpm"
+            state: present
