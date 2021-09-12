@@ -8,18 +8,6 @@
         name: elasticsearch
         state: restarted
         enabled: true
-    - name: restart Kibana
-      become: true
-      systemd:
-        name: kibana
-        state: restarted
-        enabled: true
-    - name: restart Filebeat
-      become: true
-      systemd:
-        name: filebeat
-        state: restarted
-        enabled: true
 
 
   tasks:
@@ -46,6 +34,13 @@
 
 - name: Install Kibana
   hosts: kibana
+  handlers:
+  - name: restart Kibana
+    become: true
+    systemd:
+      name: kibana
+      state: restarted
+      enabled: true
   tasks:
     - name: Download Kibana rpm
       get_url:
@@ -68,6 +63,13 @@
 
 - name: Install Filebeat
   hosts: app
+  handlers:
+  - name: restart Filebeat
+    become: true
+    systemd:
+      name: filebeat
+      state: restarted
+      enabled: true
   tasks:
     - name: Download Filebeat rpm
       get_url:
