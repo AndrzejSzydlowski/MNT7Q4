@@ -97,6 +97,4 @@
         chdir: /usr/share/filebeat/bin
       register: filebeat_setup
       until: filebeat_setup is succeeded
-      register: myoutput2
-      changed_when: myoutput2.rc != 0
       notify: restart Filebeat
