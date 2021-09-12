@@ -4,19 +4,23 @@
   handlers:
     - name: restart Elasticsearch
       become: true
-      service:
+      systemd:
         name: elasticsearch
         state: restarted
+        enable: true
     - name: restart Kibana
       become: true
-      service:
+      systemd:
         name: kibana
         state: restarted
+        enable: true
     - name: restart Filebeat
       become: true
-      service:
+      systemd:
         name: filebeat
         state: restarted
+        enable: true
+
 
   tasks:
     - name: Download Elasticsearch's rpm
