@@ -52,10 +52,10 @@
       register: download_kibana
       until: download_kibana is succeeded
     - name: Install kibana
-        become: true
-        yum:
-          name: "/tmp/kibana-{{ elk_stack_version }}-x86_64.rpm"
-          state: present
+      become: true
+      yum:
+        name: "/tmp/kibana-{{ elk_stack_version }}-x86_64.rpm"
+        state: present
     - name: Configure Kibana
       become: true
       template:
