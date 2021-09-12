@@ -64,36 +64,36 @@
       notify: restart kibana
 
 - name: Install Filebeat
-    hosts: app
-    tasks:
-      - name: Download Filebeat rpm
-        get_url:
-          url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ elk_stack_version }}-x86_64.rpm"
-          dest: "/tmp/filebeat-{{ elk_stack_version }}-x86_64.rpm"
-        register: download_filebeat
-        until: download_filebeat is succeeded
-      - name: Install Filebeat
-          become: true
-          yum:
-            name: "/tmp/filebeat-{{ elk_stack_version }}-x86_64.rpm"
-            state: present
+  hosts: app
+  tasks:
+    - name: Download Filebeat rpm
+      get_url:
+        url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ elk_stack_version }}-x86_64.rpm"
+        dest: "/tmp/filebeat-{{ elk_stack_version }}-x86_64.rpm"
+      register: download_filebeat
+      until: download_filebeat is succeeded
+    - name: Install Filebeat
+        become: true
+        yum:
+          name: "/tmp/filebeat-{{ elk_stack_version }}-x86_64.rpm"
+          state: present
 
-      - name: Configure Filebeat
-        become: true
-        template:
-          src: filebeat.yml.j2
-          dest: /etc/filebeat/filebeat.yml
-        notify: restart Filebeat
-      - name: Set Filebeat systemwork
-        become: true
-        command:
-          cmd: filebeat modules enable system
-          chdir: /usr/share/filebeat/bin
-      - name: Load Kibana dashboard
-        become: true
-        command:
-          cmd: filebeat setup
-          chdir: /usr/share/filebeat/bin
-        register: filebeat_setup
-        until: filebeat_setup is succeeded
-        notify: restart Filebeat
+    - name: Configure Filebeat
+      become: true
+      template:
+        src: filebeat.yml.j2
+        dest: /etc/filebeat/filebeat.yml
+      notify: restart Filebeat
+    - name: Set Filebeat systemwork
+      become: true
+      command:
+        cmd: filebeat modules enable system
+        chdir: /usr/share/filebeat/bin
+    - name: Load Kibana dashboard
+      become: true
+      command:
+        cmd: filebeat setup
+        chdir: /usr/share/filebeat/bin
+      register: filebeat_setup
+      until: filebeat_setup is succeeded
+      notify: restart Filebeat
