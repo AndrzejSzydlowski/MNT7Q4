@@ -2,19 +2,16 @@
 - name: Install Elasticsearch
   hosts: elasticsearch
   handlers:
-
     - name: restart Elasticsearch
       become: true
       service:
         name: elasticsearch
         state: restarted
-
     - name: restart Kibana
       become: true
       service:
-        name: Kibana
+        name: kibana
         state: restarted
-
     - name: restart Filebeat
       become: true
       service:
