@@ -7,19 +7,19 @@
       systemd:
         name: elasticsearch
         state: restarted
-        enable: true
+        enabled: true
     - name: restart Kibana
       become: true
       systemd:
         name: kibana
         state: restarted
-        enable: true
+        enabled: true
     - name: restart Filebeat
       become: true
       systemd:
         name: filebeat
         state: restarted
-        enable: true
+        enabled: true
 
 
   tasks:
