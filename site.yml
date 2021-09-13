@@ -102,5 +102,7 @@
         cmd: filebeat setup
         chdir: /usr/share/filebeat/bin
       register: filebeat_setup
+      register: myoutput2
       until: filebeat_setup is succeeded
+      changed_when: myoutput2.rc != 0
       notify: restart Filebeat
